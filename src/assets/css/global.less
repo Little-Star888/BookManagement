@@ -1,0 +1,46 @@
+/* 全局样式 */
+@text-primary-color: #1a1a1a;
+@text-secondary-color : #666;
+@text-third-color: #999;
+
+// 初始化样式
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: @text-primary-color;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+
+.head-info {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+
+  span {
+    color: #666;
+    font-size: 12px;
+    font-weight: 100;
+  }
+}
