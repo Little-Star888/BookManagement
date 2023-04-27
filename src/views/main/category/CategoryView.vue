@@ -1,101 +1,86 @@
 <template>
   <div class="view category-view">
     <div class="head-info">
-      图书分类管理&nbsp;&nbsp;&nbsp;<span>CATEGORY MANAGEMENT</span>
+      图书分类管理&nbsp;&nbsp;&nbsp;
+      <span>CATEGORY MANAGEMENT</span>
     </div>
+    <template-view>
+      <!-- 表单头部部分 -->
+      <div class="manger">
+        <!-- 新增分类提示框 -->
+        <el-dialog
+          title="提示"
+          :close-on-click-modal="false"
+          :visible.sync="dialogVisible"
+          width="39%"
+          :before-close="handleClose"
+          @keyup.enter.native="onSubmit"
+          @opened="focus"
+        >
+          <!-- 新增分类的表单数据 -->
+          <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+            <el-form-item label="分类名称" prop="Name">
+              <el-input placeholder="请输入分类名称" v-model="form.Name" ref="nameInput"></el-input>
+            </el-form-item>
+            <el-form-item label="权重" prop="Priority">
+              <el-input placeholder="请输入权重等级 " type="number" v-model="form.Priority"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="onCancel">取 消</el-button>
+            <el-button type="primary" @click="onSubmit">确 定</el-button>
+          </span>
+        </el-dialog>
+      </div>
 
-    <!-- 表单头部部分 -->
-    <div class="manger">
-      <!-- 新增分类提示框 -->
-      <el-dialog
-        title="提示"
-        :close-on-click-modal="false"
-        :visible.sync="dialogVisible"
-        width="39%"
-        :before-close="handleClose"
-        @keyup.enter.native="onSubmit"
-        @opened="focus"
-      >
-        <!-- 新增分类的表单数据 -->
-        <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-          <el-form-item label="分类名称" prop="Name">
-            <el-input
-              placeholder="请输入分类名称"
-              v-model="form.Name"
-              ref="nameInput"
-            >
-            </el-input>
+      <!-- 右边的搜索分类和搜索框 -->
+      <div class="search" style="margin-top: -18px">
+        <el-button type="success" @click="onaddCategory" size="default">+新增分类</el-button>
+        <!-- 搜索 -->
+        <el-form :inline="true" style="margin-top: 20px">
+          <el-form-item>
+            <el-input placeholder="请输入分类名称" v-model.trim="keyword" />
           </el-form-item>
-          <el-form-item label="权重" prop="Priority">
-            <el-input
-              placeholder="请输入权重等级 "
-              type="number"
-              v-model="form.Priority"
-            >
-            </el-input>
+          <el-form-item style="margin-left: -10px">
+            <el-button type="primary" @click="onSearch">搜索</el-button>
           </el-form-item>
         </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="onCancel">取 消</el-button>
-          <el-button type="primary" @click="onSubmit">确 定</el-button>
-        </span>
-      </el-dialog>
-    </div>
-    <div class="search">
-      <!-- 新增分类和搜索框 -->
-      <el-button type="success" @click="onaddCategory" size="default"
-        >+新增分类</el-button
-      >
-      <!-- 搜索 -->
-      <el-form :inline="true" style="margin-top: 20px">
-        <el-form-item>
-          <el-input placeholder="请输入分类名称" v-model.trim="keyword" />
-        </el-form-item>
-        <el-form-item style="margin-left: -10px">
-          <el-button type="primary" @click="onSearch">搜索</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+      </div>
 
-    <!-- 分类表单数据(包含编辑) -->
-    <el-table :data="pagedCategories" border style="width: 100%" stripe>
-      <el-table-column prop="index" label="序号" width="100"> </el-table-column>
-      <el-table-column prop="Name" label="分类名称" min-width="150">
-      </el-table-column>
-      <el-table-column prop="Priority" label="权重" width="100">
-      </el-table-column>
-      <el-table-column label="操作" width="180">
-        <template slot-scope="scope">
-          <el-button
-            type="success"
-            size="small"
-            @click="onEditCategory(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="small" @click="onDel(scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+      <!-- 分类表单数据(包含编辑) -->
+      <el-table :data="pagedCategories" border style="width: 100%" stripe>
+        <el-table-column prop="index" label="序号" width="100"></el-table-column>
+        <el-table-column prop="Name" label="分类名称" min-width="150"></el-table-column>
+        <el-table-column prop="Priority" label="权重" width="100"></el-table-column>
+        <el-table-column label="操作" width="180">
+          <template slot-scope="scope">
+            <el-button type="success" size="small" @click="onEditCategory(scope.row)">编辑</el-button>
+            <el-button type="danger" size="small" @click="onDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 分页显示部分 -->
-    <div class="pagination" v-if="filteredCategories.length > 0">
-      <el-pagination
-        layout="prev, pager, next"
-        :total="filteredCategories.length"
-        :page-size="pageSize"
-        background
-        style="margin-top: 10px"
-        @current-change="onPageChange"
-      >
-      </el-pagination>
-    </div>
+      <!-- 分页显示部分 -->
+      <div class="pagination" v-if="filteredCategories.length > 0">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="filteredCategories.length"
+          :page-size="pageSize"
+          background
+          style="margin-top: 10px"
+          @current-change="onPageChange"
+        ></el-pagination>
+      </div>
+    </template-view>
   </div>
 </template>
 <script>
+import TemplateView from "../Template/TemplateView.vue";
 import http from "@/request/request";
 export default {
+  components: {
+    TemplateView
+  },
   data() {
     return {
       // 一开始默认编辑框关闭
@@ -104,7 +89,7 @@ export default {
       form: {
         Id: "",
         Name: "",
-        Priority: "",
+        Priority: ""
       },
       // 表单项验证规则
       rules: {
@@ -118,13 +103,13 @@ export default {
               } else {
                 callback(new Error("分类名称必须为2位以上的汉字"));
               }
-            },
-          },
+            }
+          }
         ],
         Priority: [
           {
             required: true,
-            message: " 权重不能为空",
+            message: " 权重不能为空"
           },
           {
             validator: (rule, value, callback) => {
@@ -138,16 +123,16 @@ export default {
                   )
                 );
               }
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       categories: [], // 所有分类原始数据
       filteredCategories: [], //筛选后的数据
       pageSize: 10, // 分页大小，一页十个数据
       currentPage: 1, // 当前页码
       keyword: "", // 搜索关键字
-      clickState: 0, //0代表新增，1代表编辑
+      clickState: 0 //0代表新增，1代表编辑
     };
   },
   computed: {
@@ -155,7 +140,7 @@ export default {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
       return this.filteredCategories.slice(start, end);
-    },
+    }
   },
 
   methods: {
@@ -165,7 +150,7 @@ export default {
         const res = await http.category();
         this.categories = res.map((item, index) => ({
           index: index + 1,
-          ...item,
+          ...item
         }));
         this.filteredCategories = this.categories;
       } catch (err) {
@@ -175,15 +160,12 @@ export default {
     // 搜索
     onSearch() {
       if (this.keyword.length !== 0) {
-        this.filteredCategories = this.categories.filter((item) =>
+        this.filteredCategories = this.categories.filter(item =>
           item.Name.toLowerCase().includes(this.keyword.toLowerCase())
         );
       } else {
         this.getCategory();
       }
-      // const start = (this.currentPage - 1) * this.pageSize;
-      // const end = start + this.pageSize;
-      // return filteredCategories.slice(start, end);
     },
     // 分页切换
     onPageChange(currentPage) {
@@ -214,7 +196,7 @@ export default {
       this.form = {
         Id: "",
         Name: "",
-        Priority: "",
+        Priority: ""
       };
       // 确认为新增状态
       this.clickState = 0;
@@ -229,14 +211,13 @@ export default {
     // 提交新增或者编辑请求
     onSubmit() {
       // 先验证表单
-      this.$refs.form.validate(async (valid) => {
+      this.$refs.form.validate(async valid => {
         // 如果验证通过
         if (valid) {
           // console.log(this.form);
           // 表单验证通过发送请求(0代表新增，1代表编辑)
           if (this.clickState === 0) {
-            await http.addCategory(this.form.Name, this.form.Priority);
-            // console.log(res);
+            await http.addCategory(this.form);
             this.getCategory();
 
             // 最后一步，调用关闭新增提示框的方法
@@ -244,17 +225,18 @@ export default {
             this.handleClose();
             this.$message({
               type: "success",
-              message: "新增成功!",
+              message: "新增成功!"
             });
           } else {
-            await http.editCategory(this.form.Id, this.form.Name);
+            console.log(this.form);
+            await http.editCategory(this.form);
             // console.log(res);
             this.getCategory();
             // 最后一步，调用关闭新增提示框的方法
             this.handleClose();
             this.$message({
               type: "success",
-              message: "编辑成功!",
+              message: "编辑成功!"
             });
           }
         } else {
@@ -266,11 +248,11 @@ export default {
     // 右上角叉叉符号关闭
     handleClose() {
       this.dialogVisible = false;
-    },
+    }
   },
   mounted() {
     this.getCategory();
-  },
+  }
 };
 </script>
 <style scoped lang="less">

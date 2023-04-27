@@ -26,8 +26,8 @@ export default {
   components: {
     AsidePart,
     HeaderPart,
-    MainPart,
-  },
+    MainPart
+  }
 };
 </script>
 <style scoped lang="less">

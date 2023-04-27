@@ -31,41 +31,43 @@ export default {
   },
   // 获取图书分类信息
   category() {
-    return axios.get("/category/list")
+    return axios.get("/category/list");
   },
   // 添加图书新分类信息
-  addCategory(name, icon) {
-    return axios.post("category/create", { name, icon })
+  addCategory(params) {
+    return axios.post("category/create", params);
   },
   // 编辑图书分类信息
-  editCategory(id, name) {
-    return axios.post("/category/update", { id, name })
+  editCategory(params) {
+    return axios.post("/category/update", params);
   },
   // 查询特定图书分类信息
-  // searchCategory(){
+  searchSingleBook(id) {
+    // 第一种方法
+    return axios.get(`/book/single/${id}`);
+    // 第二种方法
+    // return axios.get("/book/single", { params: { id } });
+  },
 
-  // },
+  // 查询所有出版社
+  publisher() {
+    return axios.get("/publisher/list");
+  },
   // 获取所有图书信息
   bookList() {
-    return axios.get("/book/list")
+    return axios.get("/book/list");
   },
   // 我的借书架信息
   myShelf(readerId) {
     return axios.get("/Transaction/GetMyShelf", { params: { readerId } });
   },
   // 获取借阅记录信息
-  myRecord(readerId) {
-    return axios.get("/Transaction/GetBorrowRecords", { params: { readerId } });
+  borrowRecord() {
+    return axios.get("/Transaction/GetAllBorrowRecords");
   },
-
-
-
-
-
-
 
   // 修改密码
   submit(id, password) {
-    return axios.post('/member/reset', { id, password })
-  }
-}
+    return axios.post("/member/reset", { id, password });
+  },
+};

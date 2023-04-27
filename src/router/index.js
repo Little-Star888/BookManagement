@@ -25,6 +25,10 @@ const routes = [
       { path: 'category', name: 'category', component: () => import('../views/main/category/CategoryView.vue') },
       // 4-2 配置子路由图书信息管理页面
       { path: 'info', name: 'info', component: () => import('../views/main/info/InfoView.vue') },
+      // 4-2 配置子路由新增图书页面
+      { path: 'addBook', name: 'addBook', component: () => import('../views/main/addBook/AddBook.vue') },
+      // 4-2 配置子路由编辑图书页面
+      { path: 'editBook', name: 'editBook', component: () => import('../views/main/editBook/EditBook.vue') },
       // 4-2 配置子路由数据统计分析页面
       { path: 'count', name: 'count', component: () => import('../views/main/count/CountView.vue') },
       // 4-2 配置子路由系统设置页面

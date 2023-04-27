@@ -110,7 +110,7 @@ export default {
 <style scoped lang="less">
 .aside-view {
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
+    width: 166px;
     min-height: 400px;
   }
   .el-menu {
