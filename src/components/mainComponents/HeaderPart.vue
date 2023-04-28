@@ -9,9 +9,7 @@
       <!-- 右侧头像和用户名 -->
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
-          <router-link to="/login"
-            ><img :src="avatar.Header" class="user"
-          /></router-link>
+          <router-link to="/login"><img :src="avatar.Header" class="user" /></router-link>
           {{ avatar.Name }}
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -36,10 +34,10 @@ export default {
       return this.user
         ? this.user
         : {
-            Name: "未登录",
-            Header:
-              "https://img0.baidu.com/it/u=1240274933,2284862568&fm=253&fmt=auto&app=138&f=PNG?w=180&h=180",
-          };
+          Name: "未登录",
+          Header:
+            "https://img0.baidu.com/it/u=1240274933,2284862568&fm=253&fmt=auto&app=138&f=PNG?w=180&h=180",
+        };
     },
   },
   methods: {
@@ -51,13 +49,14 @@ export default {
       })
         .then(() => {
           this.$router.replace("/login");
-          sessionStorage.removeItem("USER");
+          this.logoutRemove()
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     ...mapMutations({
       // 映射切换左侧导航栏展开与折叠的方法
       Collapse_Menu: "collapse/Collapse_Menu",
+      logoutRemove: 'logoutRemove'
     }),
 
     // 切换左侧导航栏展开与折叠
@@ -85,26 +84,32 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 5px;
+
   // 左侧部分
   .left-part {
     display: flex;
     align-items: center;
+
     .el-button {
       background-color: skyblue;
       border: none;
     }
+
     .el-button--mini {
       font-size: 26px;
     }
   }
+
   // 右侧部分
   .right-part {
+
     // 用户名样式
     .el-dropdown-link {
       cursor: pointer;
       color: #2941e4;
       font-weight: 600;
     }
+
     // 头像样式
     .user {
       width: 36px;

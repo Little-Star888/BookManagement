@@ -8,15 +8,8 @@
       <!-- 表单头部部分 -->
       <div class="manger">
         <!-- 新增分类提示框 -->
-        <el-dialog
-          title="提示"
-          :close-on-click-modal="false"
-          :visible.sync="dialogVisible"
-          width="39%"
-          :before-close="handleClose"
-          @keyup.enter.native="onSubmit"
-          @opened="focus"
-        >
+        <el-dialog title="提示" :close-on-click-modal="false" :visible.sync="dialogVisible" width="39%"
+          :before-close="handleClose" @keyup.enter.native="onSubmit" @opened="focus">
           <!-- 新增分类的表单数据 -->
           <el-form ref="form" :model="form" label-width="80px" :rules="rules">
             <el-form-item label="分类名称" prop="Name">
@@ -62,14 +55,8 @@
 
       <!-- 分页显示部分 -->
       <div class="pagination" v-if="filteredCategories.length > 0">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="filteredCategories.length"
-          :page-size="pageSize"
-          background
-          style="margin-top: 10px"
-          @current-change="onPageChange"
-        ></el-pagination>
+        <el-pagination layout="prev, pager, next" :total="filteredCategories.length" :page-size="pageSize" background
+          style="margin-top: 10px" @current-change="onPageChange"></el-pagination>
       </div>
     </template-view>
   </div>
@@ -79,7 +66,7 @@ import TemplateView from "../Template/TemplateView.vue";
 import http from "@/request/request";
 export default {
   components: {
-    TemplateView
+    TemplateView,
   },
   data() {
     return {
@@ -89,7 +76,7 @@ export default {
       form: {
         Id: "",
         Name: "",
-        Priority: ""
+        Priority: "",
       },
       // 表单项验证规则
       rules: {
@@ -103,13 +90,13 @@ export default {
               } else {
                 callback(new Error("分类名称必须为2位以上的汉字"));
               }
-            }
-          }
+            },
+          },
         ],
         Priority: [
           {
             required: true,
-            message: " 权重不能为空"
+            message: " 权重不能为空",
           },
           {
             validator: (rule, value, callback) => {
@@ -123,16 +110,16 @@ export default {
                   )
                 );
               }
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       categories: [], // 所有分类原始数据
       filteredCategories: [], //筛选后的数据
       pageSize: 10, // 分页大小，一页十个数据
       currentPage: 1, // 当前页码
       keyword: "", // 搜索关键字
-      clickState: 0 //0代表新增，1代表编辑
+      clickState: 0, //0代表新增，1代表编辑
     };
   },
   computed: {
@@ -140,7 +127,7 @@ export default {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
       return this.filteredCategories.slice(start, end);
-    }
+    },
   },
 
   methods: {
@@ -150,7 +137,7 @@ export default {
         const res = await http.category();
         this.categories = res.map((item, index) => ({
           index: index + 1,
-          ...item
+          ...item,
         }));
         this.filteredCategories = this.categories;
       } catch (err) {
@@ -160,7 +147,7 @@ export default {
     // 搜索
     onSearch() {
       if (this.keyword.length !== 0) {
-        this.filteredCategories = this.categories.filter(item =>
+        this.filteredCategories = this.categories.filter((item) =>
           item.Name.toLowerCase().includes(this.keyword.toLowerCase())
         );
       } else {
@@ -196,7 +183,7 @@ export default {
       this.form = {
         Id: "",
         Name: "",
-        Priority: ""
+        Priority: "",
       };
       // 确认为新增状态
       this.clickState = 0;
@@ -211,7 +198,7 @@ export default {
     // 提交新增或者编辑请求
     onSubmit() {
       // 先验证表单
-      this.$refs.form.validate(async valid => {
+      this.$refs.form.validate(async (valid) => {
         // 如果验证通过
         if (valid) {
           // console.log(this.form);
@@ -225,7 +212,7 @@ export default {
             this.handleClose();
             this.$message({
               type: "success",
-              message: "新增成功!"
+              message: "新增成功!",
             });
           } else {
             console.log(this.form);
@@ -236,7 +223,7 @@ export default {
             this.handleClose();
             this.$message({
               type: "success",
-              message: "编辑成功!"
+              message: "编辑成功!",
             });
           }
         } else {
@@ -248,31 +235,36 @@ export default {
     // 右上角叉叉符号关闭
     handleClose() {
       this.dialogVisible = false;
-    }
+    },
   },
   mounted() {
     this.getCategory();
-  }
+  },
 };
 </script>
 <style scoped lang="less">
 /deep/.el-table {
   height: 100%;
+
   thead {
-    color: #0e5bf4 !important ;
+    color: #0e5bf4 !important;
   }
+
   th.el-table__cell {
     background-color: #b9c1ef;
   }
+
   .el-table__header-wrapper th,
   td {
     text-align: center;
   }
 }
+
 .pagination {
   display: flex;
   justify-content: flex-end;
 }
+
 .search {
   display: flex;
   justify-content: space-between;

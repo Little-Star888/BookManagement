@@ -1,25 +1,11 @@
 <template>
   <div class="aside-view">
-    <el-menu
-      default-active="1-4-1"
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
-      :collapse="isCollapse"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="yellow"
-    >
+    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+      :collapse="isCollapse" background-color="#545c64" text-color="#fff" active-text-color="yellow">
       <h2 v-if="isCollapse" class="main-title-small">导航</h2>
       <h2 v-else class="main-title">MIS</h2>
       <!-- 只有一级菜单的 -->
-      <el-menu-item
-        v-for="item in noChildren"
-        :key="item.label"
-        :index="item.label"
-        router
-        @click="routerTo(item)"
-      >
+      <el-menu-item v-for="item in noChildren" :key="item.label" :index="item.label" router @click="routerTo(item)">
         <i :class="`el-icon-${item.icon}`"></i>
         <span slot="title">{{ item.label }}</span>
       </el-menu-item>
@@ -28,11 +14,7 @@
         <span slot="title">退出</span>
       </el-menu-item>
       <!-- 有二级菜单的 -->
-      <el-submenu
-        v-for="item in hasChildren"
-        :key="item.label"
-        :index="item.label"
-      >
+      <el-submenu v-for="item in hasChildren" :key="item.label" :index="item.label">
         <template slot="title">
           <i :class="`el-icon-${item.icon}`"></i>
           <span slot="title">
@@ -40,19 +22,15 @@
           </span>
         </template>
         <el-menu-item-group>
-          <el-menu-item
-            v-for="subItem in item.children"
-            :key="subItem.label"
-            :index="subItem.label"
-            >{{ subItem.label }}</el-menu-item
-          >
+          <el-menu-item v-for="subItem in item.children" :key="subItem.label" :index="subItem.label">{{ subItem.label
+          }}</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {};
@@ -86,9 +64,9 @@ export default {
       })
         .then(() => {
           this.$router.replace("/login");
-          sessionStorage.removeItem("USER");
+          this.logoutRemove()
         })
-        .catch(() => {});
+        .catch(() => { });
     },
 
     // 点击跳转对应路由页面
@@ -104,6 +82,9 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    ...mapMutations({
+      logoutRemove: 'logoutRemove'
+    })
   },
 };
 </script>
@@ -113,10 +94,12 @@ export default {
     width: 166px;
     min-height: 400px;
   }
+
   .el-menu {
     height: 100vh;
     overflow: hidden;
     border-right: none;
+
     .main-title {
       color: #cad704;
       line-height: 48px;
@@ -124,6 +107,7 @@ export default {
       font-weight: 100;
       font-size: 26px;
     }
+
     .main-title-small {
       color: #00b8ff;
       line-height: 48px;
@@ -131,10 +115,12 @@ export default {
       font-weight: 700;
       font-size: 14px;
     }
+
     .el-menu-item:hover {
       background-color: skyblue !important;
       color: #fff;
     }
+
     /deep/.el-submenu__title:hover {
       background-color: skyblue !important;
       color: #fff;

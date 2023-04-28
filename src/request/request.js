@@ -26,8 +26,8 @@ axios.interceptors.response.use(
 // 4-导出各请求方法
 export default {
   //验证登录
-  login(phone, password) {
-    return axios.post("/member/login", { phone, password });
+  login(params) {
+    return axios.post("/member/login", params);
   },
   // 获取图书分类信息
   category() {

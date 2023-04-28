@@ -16,12 +16,20 @@ export default new Vuex.Store({
   state() {
     return {
       // 用户登录信息数据
-      user: JSON.parse(sessionStorage.getItem('USER')) || '',
+      user: JSON.parse(sessionStorage.getItem('USER')),
     }
   },
   // 4-2 mutations存放方法，一般对应组件里面的methods
   mutations: {
-
+    // 登录
+    loginSave(state, payload) {
+      state.user = payload
+      sessionStorage.setItem('USER', JSON.stringify(state.user))
+    },
+    logoutRemove(state) {
+      state.user = null;
+      sessionStorage.removeItem('USER')
+    },
   },
   // 4-3 模块化管理
   modules: {
